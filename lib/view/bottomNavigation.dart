@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:melakago_web/view/claimList.dart';
 import 'package:melakago_web/view/redeem.dart';
 import 'package:melakago_web/view/redeemHistory.dart';
 import 'package:melakago_web/view/services.dart';
@@ -39,6 +40,10 @@ class _BottomNavigationState extends State<BottomNavigation> {
           label: 'Redeem',
         ),
         BottomNavigationBarItem(
+          icon: Icon(Icons.list_alt),
+          label: 'Claim List',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.person),
           label: 'Profile',
         ),
@@ -64,6 +69,13 @@ class _BottomNavigationState extends State<BottomNavigation> {
             ),
           );
         } else if (index == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => claimList(company: widget.company, initialIndex: index),
+            ),
+          );
+        } else if (index == 3) {
           Navigator.push(
             context,
             MaterialPageRoute(

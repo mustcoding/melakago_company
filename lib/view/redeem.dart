@@ -33,6 +33,7 @@ class _RedeemState extends State<Redeem> {
   int appUserId=0;
   int rewardId=0;
   int redeemId=0;
+  int tourismId=0;
   int tourismServiceId=0;
   int crId=0;
   int rewardPoint=0;
@@ -45,43 +46,72 @@ class _RedeemState extends State<Redeem> {
 
   }
 
-
-  void proceedRedeem(rewardCode, phoneNumber) async{
+  void proceedRedeem(rewardCode, appUserId) async{
 
     tourismServiceId = widget.company.tourismServiceId!;
-
-    appUser user = appUser.getIdByPN(phoneNumber);
-
-    if (await user.getUserId()){
-      appUserId=user.appUserId!;
+    print("tourismServideId= ${tourismServiceId}");
 
      Reward reward = Reward.getIdByCode(rewardCode);
 
      if (await reward.getRewardId()){
        rewardId=reward.rewardId!;
        rewardPoint = reward.rewardPoint!;
+       tourismId = reward.tourismServiceId!;
+       print("tototo: ${tourismId}");
 
-       redeemReward redeem = redeemReward.getRedeemId(appUserId, rewardId);
-       if(await redeem.getRedeemRewardId())
-       {
-          redeemId = redeem.redeemId!;
+       if (tourismId == tourismServiceId){
 
-          /*// Format the date in yyyy-MM-dd format
+         redeemReward redeem = redeemReward.getRedeemId(appUserId, rewardId);
+         if(await redeem.getRedeemRewardId())
+         {
+           redeemId = redeem.redeemId!;
+
+           /*// Format the date in yyyy-MM-dd format
           dateRedeem = DateFormat('yyyy-MM-dd').format(DateTime.now());*/
-          companyReward manageReward = companyReward.Add(crId, rewardId, appUserId,
-          tourismServiceId, dateRedeem, rewardPoint);
+           companyReward manageReward = companyReward.Add(crId, rewardId, appUserId,
+               tourismServiceId, dateRedeem, rewardPoint);
 
-          if(await manageReward.saveRedeemByCompany()){
+           if(await manageReward.saveRedeemByCompany()){
 
-            redeemReward redeem = redeemReward.updateRedeemReward(redeemId, appUserId, rewardId);
-            if (await redeem.updateStatus()){
-              _showMessage("Redeem Reward Successfull");
-            }
-          }
+             redeemReward redeem = redeemReward.updateRedeemReward(redeemId, appUserId, rewardId);
+             if (await redeem.updateStatus()){
+               _showMessage("Redeem Reward Successfull");
+             }
+           }
+         }
+         else{
+           _AlertMessage("No Available Reward");
+         }
+
        }
+       else{
+         _AlertMessage("Reward Can't being redeem at your company");
+       }
+
      }
-    }
+
   }
+
+  void _AlertMessage(String msg) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Message"),
+          content: Text(msg),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   void _showMessage(String msg){
     if(mounted){
@@ -127,14 +157,14 @@ class _RedeemState extends State<Redeem> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                SizedBox(height: 40),
+                SizedBox(height: 70),
                 Center(
                   child: Text(
                     'REDEEM REWARD ',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
                 ),
-                SizedBox(height: 70),
+                SizedBox(height: 50),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Container(
@@ -148,18 +178,21 @@ class _RedeemState extends State<Redeem> {
                           labelText: 'Reward Code',
                         ),
                         SizedBox(height: 20),
-                        buildTextField(
-                          controller: phoneNumberController,
-                          labelText: 'Phone Number',
-                        ),
-                        SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
                             // Add your redemption logic here
-                            rewardCode = rewardCodeController.text;
-                            phoneNumber = phoneNumberController.text;
+                            String rewardUserCode = rewardCodeController.text;
 
-                            proceedRedeem(rewardCode, phoneNumber);
+                            // Split the code into two parts:
+                            List<String> codeParts = rewardUserCode.split('');  // Split by individual characters
+                            String rewardCode = codeParts.sublist(0, 5).join();  // Extract first 5 characters
+                            appUserId = int.parse(codeParts.sublist(5).join());      // Extract remaining characters
+
+                            // Use the extracted values:
+                            print("Reward Code: $rewardCode");  // Output: Reward Code: RW011
+                            print("App User ID: $appUserId");   // Output: App User ID: 12
+
+                            proceedRedeem(rewardCode, appUserId);
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => Redeem(company: widget.company, initialIndex: widget.initialIndex)),

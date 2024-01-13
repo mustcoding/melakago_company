@@ -48,6 +48,10 @@ class tourismService {
       this.businessContactNumber,
       );
 
+  tourismService.newJ(
+      this.tourismServiceId,
+      );
+
   tourismService.getEmail(
       this.email,
       );

@@ -2,7 +2,7 @@
     <application
         android:label="melakago_company"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/melakago">
         <activity
             android:name=".MainActivity"
             android:exported="true"

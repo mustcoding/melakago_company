@@ -7,6 +7,7 @@ class Reward {
   int? rewardPoint;
   String? rewardCode;
   String? tnc;
+  int? tourismServiceId;
 
   Reward(
       this.rewardId,
@@ -14,6 +15,7 @@ class Reward {
       this.rewardPoint,
       this.rewardCode,
       this.tnc,
+      this.tourismServiceId,
       );
 
   Reward.newJ(
@@ -25,12 +27,18 @@ class Reward {
       this.rewardCode,
       );
 
+  Reward.tourismIdByCode(
+      this.rewardCode,
+      );
+
   Reward.fromJson(Map<String, dynamic> json)
       : rewardId = json['rewardId'] as dynamic?,
         rewardName = json['rewardName'] as String? ?? '',
         rewardPoint = json['rewardPoint'] as dynamic?,
         rewardCode = json['rewardCode'] as String? ?? '',
-        tnc = json['tnc'] as String? ?? '';
+        tnc = json['tnc'] as String? ?? '',
+        tourismServiceId = json['tourismServiceId'] as dynamic?;
+
 
   Map<String, dynamic> toJson() => {
     'rewardId': rewardId,
@@ -38,6 +46,7 @@ class Reward {
     'rewardPoint': rewardPoint,
     'rewardCode': rewardCode,
     'tnc': tnc,
+    'tourismServiceId':tourismServiceId,
   };
 
   Future<bool> getRewardId() async {
@@ -47,7 +56,23 @@ class Reward {
     if (req.status() == 200) {
       rewardId=req.result()['rewardId'];
       rewardPoint=req.result()['rewardPoint'];
-      print(rewardId);
+      tourismServiceId = req.result()['tourismServiceId'];
+
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
+  Future<bool> getTourismServiceId() async {
+    RequestController req = RequestController(path: "/api/company/getRewardId.php");
+    req.setBody(toJson());
+    await req.post();
+    if (req.status() == 200) {
+      tourismServiceId=req.result()['tourismServiceId'];
+
+      print(tourismServiceId);
 
       return true;
     }

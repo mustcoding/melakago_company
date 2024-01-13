@@ -1,6 +1,7 @@
 import 'package:melakago_web/Model/reward.dart';
 
 import '../Controller/request_controller.dart';
+import 'appUser.dart';
 
 class companyReward {
   int? crId;
@@ -10,6 +11,7 @@ class companyReward {
   String? dateRedeem;
   int? pointRedeem;
   Reward? reward;
+  appUser? user;
 
 
   companyReward(
@@ -20,6 +22,7 @@ class companyReward {
       this.dateRedeem,
       this.pointRedeem,
       this.reward,
+      this.user,
       );
 
   companyReward.Add(
@@ -33,7 +36,6 @@ class companyReward {
 
   companyReward.getList(
       this.tourismServiceId,
-      this.dateRedeem,
       );
 
   // Existing code...
@@ -48,6 +50,10 @@ class companyReward {
         reward = Reward.newJ(
           json['rewardName'] as String? ?? '',
           json['rewardCode'] as String? ?? '',
+        ),
+        user = appUser.newJ(
+          json['firstName'] as String? ?? '',
+          json['lastName'] as String? ?? '',
         );
   // Initialize it from JSON
 
@@ -61,6 +67,7 @@ class companyReward {
     'dateRedeem': dateRedeem,
     'pointRedeem': pointRedeem,
     'reward':reward,
+    'user':user,
   };
 
   Future<bool> saveRedeemByCompany() async {

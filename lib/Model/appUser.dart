@@ -32,6 +32,10 @@ class appUser {
       );
 
 
+  appUser.newJ(
+      this.firstName,
+      this.nickName
+      );
 
   appUser.getId(
       this.email,
