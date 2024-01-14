@@ -26,26 +26,8 @@ class tourismServiceImage {
     'tourismServiceId': tourismServiceId,
   };
 
-  Future<bool> saveImage() async {
-    RequestController req = RequestController(path: "/api/tourismServiceImage.php");
-    req.setBody(toJson());
-    await req.post();
-    if (req.status() == 400)
-    {
-      return false;
-    }
-    else if (req.status() == 200)
-    {
-      return true;
-    }
-    else
-    {
-      return false;
-    }
-  }
-
   Future<bool> getImage() async {
-    RequestController req = RequestController(path: "/api/getImage.php");
+    RequestController req = RequestController(path: "/api/company/getImage.php");
     req.setBody(toJson());
     await req.post();
     if (req.status() == 200) {

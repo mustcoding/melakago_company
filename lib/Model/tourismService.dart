@@ -151,50 +151,6 @@ class tourismService {
     }
   }
 
-  Future<int> calculate() async {
-    RequestController req = RequestController(path: "/api/countTourismService.php");
-    req.setBody(toJson());
-    await req.post();
-    if (req.status() == 200) {
-      int result=req.result()['count'];
-      return result;
-    }
-    else {
-      return 0;
-    }
-  }
-
-
-
-
-
-  Future<List<tourismService>> loadAll() async {
-    List<tourismService> result = [];
-    RequestController req =
-    RequestController(path: "/api/tourismService.php");
-    await req.get();
-    if (req.status() == 200 && req.result() != null) {
-      for (var item in req.result()) {
-        result.add(tourismService.fromJson(item));
-      }
-    }
-    return result;
-  }
-
-  Future<List<tourismService>> loadTourismService() async {
-    List<tourismService> result = [];
-    RequestController req =
-    RequestController(path: "/api/getTourismServiceBytsId.php");
-    req.setBody(toJson());
-    await req.post();
-    if (req.status() == 200 && req.result() != null) {
-      for (var item in req.result()) {
-        result.add(tourismService.fromJson(item));
-      }
-    }
-    return result;
-  }
-
   Future<bool> checkCompanyExistence() async {
     RequestController req =
     RequestController(path: "/api/company/checkCompanyExistence.php");
