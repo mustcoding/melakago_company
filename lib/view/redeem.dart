@@ -183,20 +183,35 @@ class _RedeemState extends State<Redeem> {
                             // Add your redemption logic here
                             String rewardUserCode = rewardCodeController.text;
 
-                            // Split the code into two parts:
+// Split the code into two parts:
                             List<String> codeParts = rewardUserCode.split('');  // Split by individual characters
                             String rewardCode = codeParts.sublist(0, 5).join();  // Extract first 5 characters
-                            appUserId = int.parse(codeParts.sublist(5).join());      // Extract remaining characters
+
+                            try {
+                              // Extract remaining characters and convert to an integer
+                              appUserId = int.parse(codeParts.sublist(5).join());
+
+                              // Check if rewardUserCode doesn't contain any part of rewardCode and appUserId
+                              if (rewardUserCode.contains(rewardCode)) {
+                                proceedRedeem(rewardCode, appUserId);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Redeem(company: widget.company, initialIndex: widget.initialIndex)),
+                                );
+                              } else {
+                                // Your logic when rewardUserCode contains some part of rewardCode
+                                _AlertMessage("Invalid rewardCode");
+                              }
+                            } catch (e) {
+                              // Handle the case when the second part is not an integer
+                              _AlertMessage("Invalid rewardCode");
+                            }
 
                             // Use the extracted values:
                             print("Reward Code: $rewardCode");  // Output: Reward Code: RW011
                             print("App User ID: $appUserId");   // Output: App User ID: 12
 
-                            proceedRedeem(rewardCode, appUserId);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => Redeem(company: widget.company, initialIndex: widget.initialIndex)),
-                            );
+
                           },
                           child: Text('Redeem Now', style:TextStyle(color:Colors.purple)),
                         ),

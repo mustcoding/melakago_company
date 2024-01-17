@@ -4,13 +4,6 @@ import 'package:melakago_web/view/redeem.dart';
 import '../Model/tourismService.dart';
 
 
-
-void main(){
-  runApp(const MaterialApp(
-    home:signIn(),
-  ));
-}
-
 class signIn extends StatefulWidget {
   const signIn({super.key});
 
